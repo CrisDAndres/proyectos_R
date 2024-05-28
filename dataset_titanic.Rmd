@@ -1,0 +1,87 @@
+---
+title: "Dataset Titanic"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Activa los paquetes y datos que utilizaremos
+  
+```{r echo=TRUE}
+library(tidyverse) #activa los paquetes para el análisis de datos 
+library(carData) #activa el paquete donde se encuentran los datos
+data(TitanicSurvival) #activa los datos
+head(TitanicSurvival) #muestra los primeros casos
+summary(TitanicSurvival) #resume la información que tenemos
+
+```
+  
+
+## ¿Cuántas personas sobrevivieron a la tragedia del Titanic?
+
+```{r}
+ TitanicSurvival %>% 
+  count(survived) #elige la función que te permite contar (obtener la frecuencia) de la variable supervivientes
+```
+
+Sobrevivieron **500** personas.
+ 
+
+## ¿Cuántos sobrevivieron de cada sexo?
+
+```{r}
+ TitanicSurvival %>%
+  filter(survived=="yes") %>% 
+  group_by(survived, sex) %>% #lo mismo que antes pero previamente debes elegir la función que te permite agrupar por las variables de interés, superviviente y sexo
+  count(survived)
+```
+
+De los 500 supervivientes, *339* fueron ***mujeres***, y *161* ***hombres***.
+ 
+## ¿Cuál es la edad media de los supervivientes y no supervivientes?
+ 
+```{r}
+ TitanicSurvival %>%
+  group_by(survived) %>% #elige la función que te permite agrupar los datos por superviviente o no %>%
+    summarise(mean_age = mean(age, na.rm = TRUE)) #elige la función que te permite resumir la edad calculando su media %>% 
+
+```
+ 
+La edad media de los que sobrevivieron fue de **28.91 años**, mientras que la edad media de los que no sobrevivieron fue de **30.54 años**.
+ 
+## Crea categorías para identificar los sujetos menores de edad.
+
+Crea una nueva columna llamada "age_cut" que tome los valores: "Minor" si la edad es menor que 18 o "Major" en caso contrario. ¿Cuál es el porcentaje de supervivientes en cada clase de edad?
+
+```{r}
+TitanicSurvival %>%
+  mutate(age_bracket = ifelse(age < 18, 'Minor','Major')) %>% #elige la función que te permita calcular una nueva variable de categorías de edad.
+  na.omit() %>% 
+  group_by(age_bracket, survived) %>% #elige la función que te permita agrupar los cálculos por los grupos de interés
+  summarise(n = n()) %>% # elige la función que te permita resumir el conteo de casos para cada grupo
+  mutate(freq = 100* n / sum(n)) #calcula una nueva variable a partir del conteo, pasándolo a porcentaje
+```
+
+El porcentaje de supervivientes por edad fue de un **38,7%** de supervivientes mayores de edad, con respecto a un **52,5%** menores de edad.
+
+## ¿Se priorizó salvar a los menores de edad y a las mujeres? ¿y de clase?
+
+Es decir, el número (o porcentaje) de menores y mujeres supervivientes varió para los pasajeros con billetes de primera, segunda o tercera clase. Utiliza gráficos para responder a esta pregunta.
+
+```{r}
+TitanicSurvival %>%
+  mutate(age_bracket = ifelse(age < 18, 'Minor','Major')) %>% #con la misma elección que antes
+  na.omit() %>% #elimina los NA
+  ggplot(aes(x = survived, group = passengerClass, fill=sex)) +  #grafica supervivientes vs clase de pasajero
+  geom_bar() + #selecciona el tipo geom_* que te permite obtener barras
+  facet_grid(passengerClass ~ sex + age_bracket) #divide el gráfico en parcelas según clase de pasajero, sexo y clase de edad
+
+```
+
+Se priorizó salvar a mujeres y niños, y la diferencia es más notoria en aquellos de primera clase.
+En primera clase las mujeres supervivientes mayores de edad fueron muchas más que las no supervivientes, y lo mismo en segunda clase, aunque la diferencia no es tan notoria. Sin embargo en tercera clase fueron más las mujeres que no sobrevivieron. En hombres la cantidad de no supervivientes es mayor a medida que se pasa de primera a tercera clase, y en las tres clases hay un mayor número de no supervivientes que de aquellos que sí sobrevivieron.
+
