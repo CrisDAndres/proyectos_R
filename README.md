@@ -23,6 +23,6 @@ Los archivos se centran en la creación de informes dinámicos utilizando RMarkd
 
 - ``dataset_salaries.Rmd``: Archivo Rmarkdown que contiene el código para el análisis del set de datos **Salaries** del paquete **carData** de R, con la información del salario de profesores de una institución de enseñanza superior en EEUU. 
 - ``dataset_titanic.Rmd``: Archivo Rmarkdown que contiene el código para el análisis del set de datos **TitanicSurvival** del paquete **carData** de R. Incluye el preprocesamiento de los datos y su visualización.
-- ``dataset_gapminder.Rmd``: Archivo Rmarkdown que contiene el código para el análisis de los archivos .csv ``gapminder_1800.csv`` y ``hiv.csv``, con información de métricas socioeconómicas de países de todo el mundo y de prevalencia del VIH, respectivamente. Incluye el preprocesamiento de los datos y su visualización.
+- ``dataset_gapminder.Rmd``: Archivo Rmarkdown que contiene el código para el análisis de los archivos .csv **gapminder_1800.csv** y **hiv.csv**, con información de métricas socioeconómicas de países de todo el mundo y de prevalencia del VIH, respectivamente. Incluye el preprocesamiento de los datos y su visualización.
 - /Data: Carpeta de datos que incluye los archivos .csv ``gapminder_1800.csv`` y ``hiv.csv``.
 - /pdf: Carpeta que incluye los archivos .pdf generados mediante los ficheros Rmarkdown.
